@@ -1,7 +1,5 @@
-<<<<<<< HEAD
-lasdkfjbalskdnfbklsdnbfskldmf
-=======
-hello world !@#$%^&*()_
->>>>>>> cf7b6e22e61635bd59c0aa1a67db924a47c0e3
+Bonjour Mr.Ly  nous avons deux versions du question 1.  
 
-con cho ba loc
+Ils sont nommees 'question1' et 'demo-de-question1'.
+
+Aurevoir Mr.Ly
