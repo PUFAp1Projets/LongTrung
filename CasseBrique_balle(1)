@@ -1,3 +1,8 @@
+
+			//----------CASSEBRIQUE----------
+			
+//----------Le bibliothèque----------			
+
 #include <iostream>
 #include <math.h>
 #include <cstdlib> 
@@ -6,6 +11,8 @@
 #include <unistd.h>
 #include <stdio.h>
 using namespace std;
+
+//----------Definis et les variables----------
 
 #define N 20
 #define NBRE_GOUTTE 1
@@ -27,10 +34,16 @@ typedef struct {
 void init_sprite(Sprite & s, double x, double y, double dx, double dy);
 void mise_a_jour_sprite(Sprite & s);
 
+//----------Le corp MAIN----------
+
 int main () 
 {
+	//----------Donnés au debut----------
+	
   Sprite goutte[NBRE_GOUTTE];
   init_sprite(goutte[0], 4, 5, 0.5, 0.5);
+ 	
+ 	//----------Changer la direction et la vitesse de la balle avec le clavier----------
 
   for (int t=0; t<1000; t++) 
   {
@@ -40,6 +53,9 @@ int main ()
       char c = getchar();
       system ("stty cooked");
       switch (c) {
+      
+      			//*******Le f,g pour le verticale; le t,h pour l'horizontale*******
+      			
       case 'f':
         goutte[0].dx = 0.3;
         break;
@@ -56,6 +72,8 @@ int main ()
       }
     }
     system ("stty cooked");
+	
+	//----------Les fonctions----------
 
     paysage();
       screen[(int) goutte[0].x][(int) goutte[0].y] = '@';
@@ -64,6 +82,7 @@ int main ()
   }
 }
 
+//----------Donner les coordonnés à la balle----------
 
 void init_sprite(Sprite & s,
                  double x, 
@@ -76,6 +95,8 @@ void init_sprite(Sprite & s,
   s.dy = dy;
 }
 
+//----------(important)Les conditions pour encadre la balle----------
+
 void mise_a_jour_sprite(Sprite & s) {
   s.x += s.dx;
 s.y += s.dy;
@@ -84,8 +105,11 @@ if(s.x > N-2) s.dx= -0.8;
 if(s.y <2) s.dy=1.2;
 if(s.y >N-2)s.dy=-1.2;
 
-}			
-		      
+}
+
+//----------Images----------
+
+	//----------Le cadre----------
 
 void paysage() {
   for (int i=0; i<N; i++)
@@ -96,6 +120,8 @@ void paysage() {
         screen[i][j] = ' ';
 }
 
+	//----------La balle----------
+
 void affiche_screen() {
   system("clear");
   for (int i=0; i<N; i++) {
@@ -104,6 +130,8 @@ void affiche_screen() {
     cout << endl;
   }
 }
+
+//----------Pas nécessaire de comprendre maintenant ^_^----------
 
 bool touche_appuyee()  
 {
