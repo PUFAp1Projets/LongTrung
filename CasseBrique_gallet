@@ -1,3 +1,8 @@
+
+                           //-----------CASSEBRIQUE--------------
+                           
+//----------La bibliothèque----------
+
 #include <iostream>
 #include <math.h>
 #include <cstdlib> 
@@ -6,6 +11,8 @@
 #include <unistd.h>
 #include <stdio.h>
 using namespace std;
+
+//----------Definis et Présentation des variables----------
 
 #define N 20
 #define M 40
@@ -28,15 +35,25 @@ typedef struct {
 void init_sprite(Sprite & s, double x, double y, double dx, double dy);
 void mise_a_jour_sprite(Sprite & s, Sprite u[]);
 
+//----------Le corp MAIN()----------
+
 int main () {
+  
+		//----------Donné au debut:La balle----------
+		
   Sprite goutte[NBRE_GOUTTE];
   init_sprite(goutte[0], 5, 5, 0.5, 0.5);
+  
+  		//----------Donné au debut:Le gallet----------
+  		
   Sprite gallet[4];
   init_sprite(gallet[0], 16, 6, 0, 0);
   init_sprite(gallet[1], 16, 7, 0, 0);
   init_sprite(gallet[2], 16, 8, 0, 0);
   init_sprite(gallet[3], 16, 9, 0, 0);
 
+		//----------Controler le gallet avec le clavier----------
+		
   for (int t=0; t<1000; t++) 
   {
     system ("stty raw");
@@ -45,12 +62,23 @@ int main () {
       char c = getchar();     
       system ("stty cooked");
       switch (c) {
+      
+      *******(Tricher)Utiliser pour controler la balle si vous ne pouvez pas gagner ^^~ LOL*******
+     
+     /* 
+     
       case 'a':
         goutte[0].dx = 0.3;
         break;
       case 'b':
-        goutte[0].dx = -0.3;
+        goutte[0].dx = 0.9;
         break;
+        
+        
+    */    
+    
+    //*******controler: f pour la gauche, g pour la droite*******
+        
       case 'f':
 	for(int k=3;k>=0;k--)	  
 	  gallet[k].y -=1;		
@@ -65,7 +93,8 @@ int main () {
       }              
     } 
     system ("stty cooked"); 
-    
+    		
+    		//----------Les fonctions----------
     
     paysage();
     screen[(int) goutte[0].x][(int) goutte[0].y] = 'O';
@@ -79,6 +108,10 @@ int main () {
   }
 }
 
+//----------Donner les coordonnés à la balle et au gallet----------
+
+	//*******Pour la balle*******
+	
 void init_sprite(Sprite & s,
                  double x, 
                  double y, 
@@ -89,6 +122,9 @@ void init_sprite(Sprite & s,
   s.dx = dx;
   s.dy = dy;
 }
+
+	//*******Pour le gallet*******
+	
 void init_sprite(Sprite u[],
 		 double x,
 		 double y,
@@ -103,8 +139,12 @@ void init_sprite(Sprite u[],
     }
 }
 
+//----------(importants)Les conditions----------
+
 void mise_a_jour_sprite(Sprite & s, Sprite u[]) {
-  
+
+		//----------Encadrer la balle----------  
+		
   s.x += s.dx;
   s.y += s.dy;
   
@@ -113,16 +153,24 @@ void mise_a_jour_sprite(Sprite & s, Sprite u[]) {
   if (s.y < 3) s.dy = 1.4;
   if (s.y > M-2) s.dy = -1.4;
   
+  		//----------Limiter le gallet sur une ligne----------
+  
   for( int r=3; r>=0; r--)    
     if(u[0].y < 2) u[r].y +=1;
       
   for( int r=0; r<4; r++)
     if(u[3].y > M-3) u[r].y -=1;
 
+		//----------La balle rebondit lorsqu'elle touche le gallet----------
+
   if(s.x == u[0].x -1 && (s.y == u[0].y || s.y == u[1].y || s.y == u[2].y || s.y == u[3].y)) s.dx = -0.5;
   
 }
 
+//----------Images----------
+
+	//----------Le cadre----------
+	
 void paysage() {
   for (int i=0; i<N; i++)
     for (int j=0; j<M; j++)
@@ -132,6 +180,8 @@ void paysage() {
         screen[i][j] = ' ';
 }
 
+	//----------La balle----------
+	
 void affiche_screen() {
   system("clear");
   for (int i=0; i<N; i++) {
@@ -140,6 +190,8 @@ void affiche_screen() {
     cout << endl;
   }
 }
+
+//----------Qu'est-ce que c'est ???----------
 
 bool touche_appuyee()  
 {
