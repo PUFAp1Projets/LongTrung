@@ -15,7 +15,7 @@ int main ()
   cout<<"Combien de tours ?";
   cin>>N;
   design();
-  usleep(6*22*8000*N);
+  usleep(6*22*8000*N); // OL: inutile
 }
 
 
@@ -26,6 +26,7 @@ void design()
   bool a=false,b=false;
   
   cout << a << b;
+  // OL: la ligne suivante est illisible, il faut l'écrire différemment.
   for (;;((a==0 && b==0)?(h++, k++):((a==1 && b==0)? (h--,k++): ((a==1 && b==1)?(h--, k--):(h++, k--)))))
 	{
 	  for (int i=0; i<row; i++)
