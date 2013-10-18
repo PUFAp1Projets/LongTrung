@@ -1,4 +1,3 @@
-
                            //-----------CASSEBRIQUE--------------
                            
 //----------La bibliothèque----------
@@ -14,9 +13,10 @@ using namespace std;
 
 //----------Definis et Présentation des variables----------
 
-#define N 20
-#define M 40
-#define NBRE_GOUTTE 1
+#define N 20	//*******N : ligne*******
+#define M 40	//*******M : collum*******
+#define L 8	//*******L : largeur de gallet*******
+#define NBRE_GOUTTE 1	//*******nombre de balle*******
 
 bool touche_appuyee();
 
@@ -47,10 +47,12 @@ int main () {
   		//----------Donné au debut:Le gallet----------
   		
   Sprite gallet[4];
-  init_sprite(gallet[0], 16, 6, 0, 0);
-  init_sprite(gallet[1], 16, 7, 0, 0);
-  init_sprite(gallet[2], 16, 8, 0, 0);
-  init_sprite(gallet[3], 16, 9, 0, 0);
+  for (int l=0; l<L; l++)
+    {
+      gallet[0].y = 6;
+      gallet[l+1].y = gallet[l].y +1;
+      init_sprite(gallet[l], 16, gallet[l].y, 0, 0);
+    }
 
 		//----------Controler le gallet avec le clavier----------
 		
@@ -104,6 +106,11 @@ int main () {
     affiche_screen();
     mise_a_jour_sprite (goutte[0], gallet);
     
+    //----------(condition important)La balle rebondit lorsqu'elle touche le gallet----------
+    
+     if ((int)goutte[0].x == 15)
+      for (int k=0; k<L; k++)
+	if((int)goutte[0].y == (int)gallet[k].y) goutte[0].dx = -0.6;
     
   }
 }
@@ -161,10 +168,6 @@ void mise_a_jour_sprite(Sprite & s, Sprite u[]) {
   for( int r=0; r<4; r++)
     if(u[3].y > M-3) u[r].y -=1;
 
-		//----------La balle rebondit lorsqu'elle touche le gallet----------
-
-  if(s.x == u[0].x -1 && (s.y == u[0].y || s.y == u[1].y || s.y == u[2].y || s.y == u[3].y)) s.dx = -0.5;
-  
 }
 
 //----------Images----------
