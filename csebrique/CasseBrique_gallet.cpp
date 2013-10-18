@@ -46,7 +46,7 @@ int main () {
   
   		//----------Donné au debut:Le gallet----------
   		
-  Sprite gallet[4];
+  Sprite gallet[L];
   for (int l=0; l<L; l++)
     {
       gallet[0].y = 6;
@@ -65,7 +65,7 @@ int main () {
       system ("stty cooked");
       switch (c) {
       
-      *******(Tricher)Utiliser pour controler la balle si vous ne pouvez pas gagner ^^~ LOL*******
+      //*******(Tricher)Utiliser pour controler la balle si vous ne pouvez pas gagner ^^~ LOL*******
      
      /* 
      
@@ -82,11 +82,11 @@ int main () {
     //*******controler: f pour la gauche, g pour la droite*******
         
       case 'f':
-	for(int k=3;k>=0;k--)	  
+	for(int k=L-1;k>=0;k--)	  
 	  gallet[k].y -=1;		
 	break;
       case 'g':
-	for(int k=0;k<4;k++)	
+	for(int k=0;k<L;k++)	
 	  gallet[k].y +=1;            
 	break;
       case 13:
@@ -100,7 +100,7 @@ int main () {
     
     paysage();
     screen[(int) goutte[0].x][(int) goutte[0].y] = 'O';
-    for (int g=0; g<4; g++)
+    for (int g=0; g<L; g++)
       screen[(int) gallet[g].x][(int) gallet[g].y] = '=';
     
     affiche_screen();
@@ -137,7 +137,7 @@ void init_sprite(Sprite u[],
 		 double y,
 		 double dx,
 		 double dy) {
-  for(int r=0; r<3; r++)
+  for(int r=0; r<L-1; r++)
     {
       u[r].x=x;
       u[r].y=y;
@@ -162,10 +162,10 @@ void mise_a_jour_sprite(Sprite & s, Sprite u[]) {
   
   		//----------Limiter le gallet sur une ligne----------
   
-  for( int r=3; r>=0; r--)    
+  for( int r=L-1; r>=0; r--)    
     if(u[0].y < 2) u[r].y +=1;
       
-  for( int r=0; r<4; r++)
+  for( int r=0; r<L; r++)
     if(u[3].y > M-3) u[r].y -=1;
 
 }
