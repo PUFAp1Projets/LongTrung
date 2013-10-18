@@ -166,7 +166,7 @@ void mise_a_jour_sprite(Sprite & s, Sprite u[]) {
     if(u[0].y < 2) u[r].y +=1;
       
   for( int r=0; r<L; r++)
-    if(u[3].y > M-3) u[r].y -=1;
+    if(u[L-1].y > M-3) u[r].y -=1;
 
 }
 
