@@ -10,8 +10,8 @@ using namespace std;
 #define N 20
 #define M 45
 #define L 8
-#define P 5
-#define Q 45
+#define P 6
+#define Q 6
 #define NBRE_GOUTTE 1
 
 bool touche_appuyee();
@@ -29,10 +29,11 @@ typedef struct {
   double dy;
 } Sprite;
 
-/*typedef struct {
-  double x1;
-  double x2;
-  } Block;*/
+typedef struct {
+  int x1;
+  int y1[Q];
+  bool apparait;
+  } Block;
 
 
 void init_sprite(Sprite & s, double x, double y, double dx, double dy);
@@ -52,21 +53,27 @@ int main () {
       init_sprite(gallet[l], 16, gallet[l].y, 0, 0);
     }
      
-  Sprite brique1[Q];
+  /*Sprite brique1[Q];
   for (int i=0; i<Q; i++)
     {
       brique1[0].y = 2;
       brique1[i+1].y = brique1[i].y +1;
       init_sprite(brique1[i], 2, brique1[i].y, 0, 0);
-    }
+    }*/
 
-
-  /*  brique[P][Q];
+  
+  Block brique[P][Q];
   for (int i=0; i<P; i++)
     for (int j=0; j<Q; j++)
-    init_block(brique[i][j], 1, 1);*/
-
-
+      {
+	brique[i][j].x1 = i+2;
+	for (int k=0; k<P; k++)
+	  {
+	    brique[i][j].apparait = true;
+	    brique[i][j].y1[k] = 5*j + 2 + k;
+	  }
+      }
+  
   for (int t=0; t<1000; t++) 
     {
       system ("stty raw");
@@ -96,37 +103,52 @@ int main () {
     } 
     system ("stty cooked"); 
     
-    
+    mise_a_jour_sprite (goutte[0], gallet);
+
     paysage();
+
     screen[(int) goutte[0].x][(int) goutte[0].y] = 'O';
     for (int g=0; g<L; g++)
       screen[(int) gallet[g].x][(int) gallet[g].y] = '=';
-
-    /* for (int i=0; i<P; i++)
+               
+    for (int i=P; i>=0; i--)
       for (int j=0; j<Q; j++)
-      screen[(int) brique[i].x][(int) brique[j].y] = '#';*/    
-
-    for (int g=0; g<Q; g++)
-      {
-	if (g==6 || g==13 || g==20 || g==27 || g==34 || g==41)
-	  screen[(int) brique1[g].x][(int) brique1[g].y] = ' ';
-	else if (g<Q-4)
-	  screen[(int) brique1[g].x][(int) brique1[g].y] = 'L';
-      }
+	for (int k=0; k<Q; k++)
+	  if ((int) goutte[0].x + 1 == brique[i][j].x1 && (int) goutte[0].y == brique[i][j].y1[k] && brique[i][j].apparait == true)
+	    { 
+	      goutte[0].dx = 0.7;
+	      brique[i][j].apparait = false;
+	    }
+    
+    for (int i = 0 ; i<P ; i++)
+      for (int j = 0 ; j<Q ; j++)
+	for (int k = 0 ; k<Q ; k++)
+	  if (brique[i][j].apparait)
+	    screen[brique[i][j].x1][brique[i][j].y1[k]] = 'H'; 
 
     affiche_screen();
-    mise_a_jour_sprite (goutte[0], gallet);
-    
+
     if ((int) goutte[0].x == 15)
       for (int k=0; k<L; k++)
 	if((int)goutte[0].y == (int)gallet[k].y) goutte[0].dx = -0.6;
-
-    if ((int) goutte[0].x >= N-2)
+    
+    if ( brique[0][0].apparait == false
+         && brique[0][1].apparait == false
+         && brique[0][2].apparait == false
+         && brique[0][3].apparait == false
+         && brique[0][4].apparait == false
+	 && brique[0][5].apparait == false)
+      { 
+	cout << "-----C'EST NORMAL -----" << endl;
+	exit(0);
+      }      
+    
+    /*  if ((int) goutte[0].x >= N-2)
       {
 	cout << "------------BLEU BLEU TU AS PERDU------------" << endl;
 	exit(0);
       }
-
+    */
   }
 }
 
@@ -171,7 +193,7 @@ void mise_a_jour_sprite(Sprite & s, Sprite u[]) {
   s.y += s.dy;
   
   if (s.x < 2) s.dx = 0.8;
-  /* if (s.x > N-2) s.dx = -0.8;*/
+   if (s.x > N-2) s.dx = -0.8;
   if (s.y < 3) s.dy = 1.4;
   if (s.y > M-2) s.dy = -1.4;
   
@@ -188,7 +210,7 @@ void paysage() {
   for (int i=0; i<N; i++)
     for (int j=0; j<M; j++)
       if (i==0 || i==N-1 || j==0 || j==M-1)
-        screen[i][j] = '*';
+        screen[i][j] = '#';
       else
         screen[i][j] = ' ';
 }
@@ -223,4 +245,7 @@ bool touche_appuyee()
   select(STDIN_FILENO+1, &fds, NULL, NULL, &tv);
   return (FD_ISSET(0, &fds));
 }
+
+
+
 
