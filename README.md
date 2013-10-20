@@ -1,5 +1,1 @@
-Bonjour Mr.Ly  nous avons deux versions du question 1.  
-
-Ils sont nommees 'question1' et 'demo-de-question1'.
-
-Aurevoir Mr.Ly
+Notre programme casse_brique a des fautes ... nous nous efforcerons de améliorer, de chercher les facons pour perfectionner ce programme plus tôt ...
