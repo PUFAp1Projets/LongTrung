@@ -70,7 +70,7 @@ int main () {
 	for (int k=0; k<P; k++)
 	  {
 	    brique[i][j].apparait = true;
-	    brique[i][j].y1[k] = 5*j + 2 + k;
+	    brique[i][j].y1[k] = 7*j + 2 + k;
 	  }
       }
   
