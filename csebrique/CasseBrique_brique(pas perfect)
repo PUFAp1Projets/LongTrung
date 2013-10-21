@@ -1,3 +1,6 @@
+					//----------CASSEBRIQUE----------
+//----------Le bibliotheque----------
+
 #include <iostream>
 #include <math.h>
 #include <cstdlib> 
@@ -7,11 +10,13 @@
 #include <stdio.h>
 using namespace std;
 
-#define N 20
-#define M 45
-#define L 8
-#define P 6
-#define Q 6
+//----------Les Definis et les variables----------
+
+#define N 20	//-----N:ligne-----
+#define M 45	//-----M:collone-----
+#define L 8	//-----L:largeur de gallet-----
+#define P 6	//-----P:ligne brique-----
+#define Q 6	//-----Q:largeur et collone de brique-----
 #define NBRE_GOUTTE 1
 
 bool touche_appuyee();
@@ -41,6 +46,10 @@ void mise_a_jour_sprite(Sprite & s, Sprite u[]);
 
 /*void init_block(Block b[][], double x1, double y1);*/
 
+//----------Le Main----------
+
+	//----------Les valeurs au debut----------
+	
 int main () {
   Sprite goutte[NBRE_GOUTTE];
   init_sprite(goutte[0], 5, 5, 0.5, 0.5);
@@ -73,7 +82,9 @@ int main () {
 	    brique[i][j].y1[k] = 7*j + 2 + k;
 	  }
       }
-  
+	
+	//----------Controler le gallet avec le clavier----------
+	
   for (int t=0; t<1000; t++) 
     {
       system ("stty raw");
@@ -82,12 +93,18 @@ int main () {
       char c = getchar();     
       system ("stty cooked");
       switch (c) {
+     
+		//----------(Tricher)Controler la balle ^^~----------
+    /*
       case 'a':
         goutte[0].dx = 0.3;
         break;
       case 'b':
         goutte[0].dx = -0.3;
         break;
+    */
+    		//----------Controler le gallet: f pour gauche, g pour droite----------
+    		
       case 'f':
 	for(int k=L-1;k>=0;k--)	  
 	  gallet[k].y -=1;		
@@ -102,15 +119,18 @@ int main () {
       }              
     } 
     system ("stty cooked"); 
+	
+	//----------Les fonctions----------
     
     mise_a_jour_sprite (goutte[0], gallet);
-
     paysage();
 
     screen[(int) goutte[0].x][(int) goutte[0].y] = 'O';
     for (int g=0; g<L; g++)
       screen[(int) gallet[g].x][(int) gallet[g].y] = '=';
-               
+	
+	//----------Les conditions pour arranger les briques----------
+	
     for (int i=P; i>=0; i--)
       for (int j=0; j<Q; j++)
 	for (int k=0; k<Q; k++)
@@ -128,6 +148,8 @@ int main () {
 
     affiche_screen();
 
+	//----------Les conditions pour la balle----------
+	
     if ((int) goutte[0].x == 15)
       for (int k=0; k<L; k++)
 	if((int)goutte[0].y == (int)gallet[k].y) goutte[0].dx = -0.6;
@@ -139,18 +161,19 @@ int main () {
          && brique[0][4].apparait == false
 	 && brique[0][5].apparait == false)
       { 
-	cout << "-----C'EST NORMAL -----" << endl;
+	cout << "-----------------C'EST NORMAL----------------" << endl;
 	exit(0);
       }      
     
-    /*  if ((int) goutte[0].x >= N-2)
+    if ((int) goutte[0].x >= N-2)
       {
 	cout << "------------BLEU BLEU TU AS PERDU------------" << endl;
 	exit(0);
       }
-    */
   }
 }
+
+//----------Donner les coordonnes de la balle et le gallet----------
 
 void init_sprite(Sprite & s,
                  double x, 
@@ -162,15 +185,6 @@ void init_sprite(Sprite & s,
   s.dx = dx;
   s.dy = dy;
 }
-
-/*void init_block(Block b[], double x1, double y1) {
-
-  for (int i=0; i<P; i++)
-      {
-	b[i].x1=x;
-	b[i].y1=y;
-      }
-}*/
 
 void init_sprite(Sprite u[],
 		 double x,
@@ -186,25 +200,31 @@ void init_sprite(Sprite u[],
     }
 }
 
+//----------Les conditions----------
 
 void mise_a_jour_sprite(Sprite & s, Sprite u[]) {
-  
+
+	//----------Pour encadrer la balle----------
+	
   s.x += s.dx;
   s.y += s.dy;
   
   if (s.x < 2) s.dx = 0.8;
-   if (s.x > N-2) s.dx = -0.8;
+  if (s.x > N-2) s.dx = -0.8;
   if (s.y < 3) s.dy = 1.4;
   if (s.y > M-2) s.dy = -1.4;
-  
+	
+	//----------Pour la balle rebondit lorsqu'elle touche le gallet----------
+	
   for( int r=L-1; r>=0; r--)    
     if(u[0].y < 2) u[r].y +=1;
       
   for( int r=0; r<L; r++)
     if(u[L-1].y > M-3) u[r].y -=1;
   
-  
 }
+
+//----------Le cadre----------
 
 void paysage() {
   for (int i=0; i<N; i++)
@@ -224,15 +244,7 @@ void affiche_screen() {
   }
 }
 
-/*void affiche_print() {
-  system("clear");
-  for (int i=0; i<Q; i++) {
-    for (int j=0; j<P; j++)
-      cout << print[i][j];
-    cout << endl;
-  }
-  }*/
-
+//----------Qu'est ce que c'est??? >.<----------
 
 bool touche_appuyee()  
 {
