@@ -6,7 +6,6 @@
 #include <cstdlib> 
 #include <termios.h>
 #include <unistd.h>
-#include <unistd.h>
 #include <stdio.h>
 using namespace std;
 
