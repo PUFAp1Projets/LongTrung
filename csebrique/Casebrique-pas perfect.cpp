@@ -213,7 +213,7 @@ void mise_a_jour_sprite(Sprite & s, Sprite u[]) {
   if (s.y < 3) s.dy = 1.4;
   if (s.y > M-2) s.dy = -1.4;
 	
-	//----------Pour la balle rebondit lorsqu'elle touche le gallet----------
+	//----------Limiter le gallet----------
 	
   for( int r=L-1; r>=0; r--)    
     if(u[0].y < 2) u[r].y +=1;
