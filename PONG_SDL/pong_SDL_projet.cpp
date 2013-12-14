@@ -11,9 +11,9 @@
 using namespace std;
 
 //----------les valeurs constante----------
-const int SCREEN_WIDTH = 960;      
-const int SCREEN_HEIGHT = 540;
-const int SCREEN_BPP = 32;
+const int SCREEN_WIDTH = 960;  //---logueur du cadre--- 
+const int SCREEN_HEIGHT = 540; //---largeur du cadre---
+const int SCREEN_BPP = 32;     //---32bits---
 const int ball_large = 44;     //---largeur du balle---
 const int ball_long = 44;      //---longueur du balle---
 const int gallet_large = 47;   //---largeur du gallet---
@@ -23,18 +23,23 @@ const int ball_vitesse = 5;    //---vitesse du balle---
 
 //----------les variables SDL----------
 SDL_Surface *screen=NULL;
-SDL_Surface *background=NULL;
-SDL_Surface *image=NULL;
-SDL_Surface *image2=NULL;
-SDL_Surface *image3=NULL;
-SDL_Surface *image4=NULL;
-SDL_Surface *image5=NULL;
-SDL_Surface *number=NULL;
-SDL_Rect src, dest;
-SDL_Event event;
-Uint32 colorkey;
+SDL_Surface *background=NULL;	//---image background---
+SDL_Surface *image=NULL;	//---image des gallets---
+SDL_Surface *image2=NULL;	//---image du balle---
+SDL_Surface *image3=NULL;	//---image des mots WIN et LOSE---
+SDL_Surface *image4=NULL;	//---image de mot (+1)---
+SDL_Surface *image5=NULL;	//---image de mot Point---
+SDL_Surface *number=NULL;	//---image des chiffres de 0 à 9---
+
+SDL_Rect src, dest;	//---variable pour les sources et les destination des images---
+SDL_Event event;	//---variable pour controler le gallet---
+Uint32 colorkey;	//---variable pour former des image (supprimer background des image)---
 
 //----------la structure du balle----------
+/*----------------------------------------
+ |coordonnées(horizontal,vertical) = (x,y)|
+ |vitesse(horizontal,vertical) = (dx,dy)  |
+  ----------------------------------------*/
 typedef struct kieu_banh
 {
   int x, y;
@@ -43,11 +48,16 @@ typedef struct kieu_banh
 static banh ball;
 
 //----------structures des gallet----------
-
+/*----------------------------------------
+ |coordonnées(horizontal,vertical) = (x,y)|
+ |vitesse(horizontal,vertical) = (dx,dy)  |
+  ----------------------------------------*/
+  //(pas nécessaires la vitesse horizontal)
+  
 //-----gallet droite-----
 typedef struct kieu_thanh_phai
 {
-  int x, y;
+  int x, y;	
   int dx, dy;
 } thanhphai;
 static thanhphai gallet_r;
@@ -74,6 +84,7 @@ void hien_thi()
   SDL_BlitSurface(background, &src, screen, &dest); 
 }
 
+//----------dessiner le mot Point du joueur à gauche----------
 void chu_point_trai()
 {
   colorkey = SDL_MapRGB(image5->format, 255, 255, 255);
@@ -90,6 +101,7 @@ void chu_point_trai()
   SDL_BlitSurface(image5, &src, screen, &dest);
 }
 
+//----------dessiner le mot Point du joueur à droite----------
 void chu_point_phai()
 {
   colorkey = SDL_MapRGB(image5->format, 255, 255, 255);
@@ -105,7 +117,6 @@ void chu_point_phai()
   dest.h = 45;
   SDL_BlitSurface(image5, &src, screen, &dest);
 }
-
 
 //----------dessiner le balle----------
 void ve_banh()
@@ -154,6 +165,7 @@ void ve_thanh_trai()
   SDL_BlitSurface(image, &src, screen, &dest);
 }
 
+//----------"+1" pour joueur à gauche----------
 void cong_diem_trai()
 {
   colorkey = SDL_MapRGB(image4->format, 0, 0, 0);
@@ -170,6 +182,7 @@ void cong_diem_trai()
   SDL_BlitSurface(image4, &src, screen, &dest);
 }
 
+//----------"+1" pour joueur à droite----------
 void cong_diem_phai()
 {
   colorkey = SDL_MapRGB(image4->format, 0, 0, 0);
@@ -186,6 +199,10 @@ void cong_diem_phai()
   SDL_BlitSurface(image4, &src, screen, &dest);
 }
 
+//----------le point des joueur----------
+/*----------------------------------
+ |  Point 0,1,2...  Point 0,1,2...  |
+  ---------------------------------*/
 void so_diem(int &diem_trai, int &diem_phai)
 {
   colorkey = SDL_MapRGB(number->format, 255, 255, 255);
@@ -202,10 +219,8 @@ void so_diem(int &diem_trai, int &diem_phai)
   dest.w = 40;
   dest.h = 40;
   
-   SDL_BlitSurface(number, &src, screen, &dest);
-   //colorkey = SDL_MapRGB(image4->format, 255, 255, 255);
-   
-   //SDL_SetColorKey(image4, SDL_SRCCOLORKEY, colorkey);
+  SDL_BlitSurface(number, &src, screen, &dest);
+
    for (int i=0; i<=10; i++)
      if(diem_trai == i)
        src.x = 40*i;
@@ -219,6 +234,8 @@ void so_diem(int &diem_trai, int &diem_phai)
    SDL_BlitSurface(number, &src, screen, &dest);
 }
 
+//----------printer les mots WIN et LOSE lorsque le jeux finit----------
+//-----WIN-----
 void win(int hienwin) 
 {
 colorkey = SDL_MapRGB(image3->format, 0, 0, 0);
@@ -235,6 +252,7 @@ colorkey = SDL_MapRGB(image3->format, 0, 0, 0);
   SDL_BlitSurface(image3, &src, screen, &dest);
 }
 
+//-----LOSE-----
 void lose(int hienlose)
 {
   colorkey = SDL_MapRGB(image3->format, 0, 0, 0);
@@ -249,26 +267,21 @@ void lose(int hienlose)
   dest.w = 100;
   dest.h = 50;
   SDL_BlitSurface(image3, &src, screen, &dest);
-  
 }
-
 
 //----------mouvement du balle----------
 void banh_chay(int &diem_trai, int &diem_phai)
 {
-  ball.x += ball.dx;
-  ball.y += ball.dy;
+  ball.x += ball.dx;	//---mouvement horizontal---
+  ball.y += ball.dy;	//---mouvement vertical---
   
-  if (ball.x < 1 || ball.x > (screen->w - 1 - ball_large))
-    ball.dx = -ball.dx;
-  
-
   /* -------------------------------------------
     |  si joueur ne peut pas recevoir le balle, |
     |  le balle va tomber et joueur a perdu. Le |
     |   balle revient au milieu de l'ecran et   |
     |  jeux va continuer.                       |
      -------------------------------------------  */
+//-----pour le borde à gauche-----
   if (ball.x < 1 )
    {
      ball.x = SCREEN_WIDTH/2;
@@ -280,6 +293,7 @@ void banh_chay(int &diem_trai, int &diem_phai)
      SDL_Delay(2000);
      diem_trai++;
    }
+//-----pour le borde à droite
   if (ball.x > (screen->w - 1 - ball_large))
     {
       ball.x = SCREEN_WIDTH/2;
@@ -292,15 +306,18 @@ void banh_chay(int &diem_trai, int &diem_phai)
       diem_phai++;
     }
   
-  //----------le balle rebondit lorsqu'il touche le cadre----------
+//----------le balle rebondit lorsqu'il touche le cadre----------
   if (ball.y < 1 || ball.y > (screen->h - 1 - ball_long))
     ball.dy = -ball.dy;
   
-  //----------le balle rebondit lorsqu'il touche le gallet----------
+//----------le balle rebondit lorsqu'il touche le gallet----------
+//-----pour gallet gauche-----
   if ((ball.x <= gallet_l.x + gallet_large) &&
       (ball.y > gallet_l.y - ball_long/2) && 
       (ball.y < gallet_l.y + gallet_long - ball_long/2)) 
     ball.dx = -ball.dx;
+    
+//-----pour gallet droite-----
   if ((ball.x + ball_large >= gallet_r.x) &&
       (ball.y > gallet_r.y - ball_long/2) &&
       (ball.y < gallet_r.y + gallet_long - ball_long/2))
@@ -320,19 +337,7 @@ void gioi_han_thanh()
     gallet_r.y -= gallet_vitesse;
 }
 
-/*void chien_thang()
-{
-  src.x = 0;
-  src.y = 0;
-  src.w = 200;
-  src.h = 100;
-  dest.x = 150;
-  dest.y = 150;
-  dest.w = 200;
-  dest.h = 100;
-  SDL_BlitSurface(image3, &src, screen, &dest);
-  }*/
-
+//----------calculer les point des joueurs----------
 void tinh_diem(int &diem_trai, int &diem_phai)
 {
   if (ball.x < 1)
@@ -424,24 +429,23 @@ int main() {
     return 1;
   int i=0;
   int diem_trai, diem_phai;
-  diem_trai = 0;
-  diem_phai = 0;
+  
+  diem_trai = 0;	// au début, le point des joueurs
+  diem_phai = 0;	// est 0.
   int hienwin;
   int hienlose;
 
-  //----------valeurs initiales du balle et des gallets----------
+//----------valeurs initiales du balle et des gallets----------
   ball.dx = ball_vitesse; ball.dy = ball_vitesse;
   
   ball.x = SCREEN_WIDTH/2;      // le balle est au milieu quand
   ball.y = SCREEN_HEIGHT/2;     // le jeux commence
   
-  //-----position des gallets-----
+//-----position des gallets-----
   gallet_r.x = SCREEN_WIDTH - 15 - gallet_large; 
   gallet_r.y = SCREEN_HEIGHT/2 - gallet_long/2;
   gallet_l.x = 15; 
   gallet_l.y = SCREEN_HEIGHT/2 - gallet_long/2; 
-  //gallet_r.dx = 5;
-  //gallet_l.dx = 5;
   gallet_r.dy = gallet_vitesse;
   gallet_l.dy = gallet_vitesse;
   
@@ -460,6 +464,13 @@ int main() {
       ve_thanh_phai();
       ve_thanh_trai();
       SDL_Delay(50);
+      
+      /*-------------------------------------------------
+       | Quand un joueur atteint à 10 points, il gagne   |
+       | le jeux, l'autre est perdu. Le jeux est finit,  |
+       | il quitte automatique après 5 seconds...        |
+        -------------------------------------------------*/
+//-----pour le joueur à gauche-----     
       if (diem_trai == 10)
 	{
 	  hienwin = 650;
@@ -472,6 +483,8 @@ int main() {
 	  diem_phai = 0;
 	  thoat = true;
 	}
+	
+//-----pour le joueur à droite-----	
       if (diem_phai == 10)
 	{
 	  hienwin = 200;
@@ -484,9 +497,6 @@ int main() {
 	  diem_phai = 0;
 	  thoat = true;
 	}
-
-
-      //SDL_UpdateRect(screen, 0, 0, 0, 0);
       
       //----------controle le gallet----------
       while (SDL_PollEvent(&event) != 0) {
@@ -513,13 +523,12 @@ int main() {
 	  thoat = true;
 	}
       }
-      if( SDL_Flip( screen ) == -1 )
+      if( SDL_Flip( screen ) == -1 )	//-----fonction pour printer les images-----
 	{
 	  return 1;
 	}
     }    
   dondep();
   return 0;
-  
 }
-
+//--------------------FINIT-AUREVOIR--------------------
