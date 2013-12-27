@@ -103,9 +103,8 @@ bool entranceValide(int x, int y, bool joueur)
 
 
 
-/*******************************************/
-/*Est-ce que le joueur a-t-il gagne		?*/
-/*******************************************/
+
+
 
 bool victoire(int x, int y)
 
@@ -114,7 +113,7 @@ bool victoire(int x, int y)
   if (   grille[x-1][y-1] == grille[x-2][y-1] 
       && grille[x-2][y-1] == grille[x-3][y-1]
       && grille[x-3][y-1] == grille[x-4][y-1]
-      && grille[x-1][y-1] == grille[x][y-1]
+      && grille[x-4][y-1] == grille[x-5][y-1]
      )
 
     return 1;
@@ -123,7 +122,7 @@ bool victoire(int x, int y)
   else if (   grille[x-1][y-1] == grille[x][y-1] 
       && grille[x][y-1] == grille[x+1][y-1]
       && grille[x+1][y-1] == grille[x+2][y-1]
-      && grille[x-1][y-1] == grille[x-2][y-1]
+      && grille[x+2][y-1] == grille[x+3][y-1]
      )
 
     return 1;
@@ -131,7 +130,7 @@ bool victoire(int x, int y)
   else if (   grille[x-1][y-1] == grille[x-1][y-2] 
       && grille[x-1][y-2] == grille[x-1][y-3]
       && grille[x-1][y-3] == grille[x-1][y-4]
-      && grille[x-1][y-1] == grille[x-1][y]
+      && grille[x-1][y-4] == grille[x-1][y-5]
      )
 
     return 1;
@@ -139,7 +138,7 @@ bool victoire(int x, int y)
   else if (   grille[x-1][y-1] == grille[x-1][y] 
       && grille[x-1][y] == grille[x-1][y+1]
       && grille[x-1][y+1] == grille[x-1][y+2]
-      && grille[x-1][y-1] == grille[x-1][y-2]
+      && grille[x-1][y+2] == grille[x-1][y+3]
      )
 
     return 1;
@@ -149,7 +148,7 @@ bool victoire(int x, int y)
   else if (   grille[x-1][y-1] == grille[x-2][y-2] 
       && grille[x-2][y-2] == grille[x-3][y-3]
       && grille[x-3][y-3] == grille[x-4][y-4]
-      && grille[x-1][y-1] == grille[x][y]
+      && grille[x-4][y-4] == grille[x-5][y-5]
      )
 
     return 1;
@@ -157,7 +156,7 @@ bool victoire(int x, int y)
   else if (   grille[x-1][y-1] == grille[x][y] 
       && grille[x][y] == grille[x+1][y+1]
       && grille[x+1][y+1] == grille[x+2][y+2]
-      && grille[x-1][y-1] == grille[x-2][y-2]
+      && grille[x+2][y+2] == grille[x+3][y+3]
      )
 
      return 1;
@@ -165,7 +164,7 @@ bool victoire(int x, int y)
   else if (   grille[x-1][y-1] == grille[x-2][y] 
       && grille[x-2][y] == grille[x-3][y+1]
       && grille[x-3][y+1] == grille[x-4][y+2]
-      && grille[x-1][y-1] == grille[x][y-2]
+      && grille[x-4][y+2] == grille[x-5][y+3]
      )
 
     return 1;
@@ -173,130 +172,23 @@ bool victoire(int x, int y)
   else  if (   grille[x-1][y-1] == grille[x][y-2] 
       && grille[x][y-2] == grille[x+1][y-3]
       && grille[x+1][y-3] == grille[x+2][y-4]
-      && grille[x-1][y-1] == grille[x-2][y]
+      && grille[x+2][y-4] == grille[x+3][y-5]
      )
 
     return 1;
 	
-	
-	//4 choix pour gagne 
-	
-	
-		 //ligne verticales  et lignes horizonales 
-  if (   grille[x-1][y-1] == grille[x-2][y-1] 
-      && grille[x-2][y-1] == grille[x-3][y-1]
-      && grille[x-3][y-1] == grille[x-4][y-1]
-           )
-
-    return 1;
-
-  
-  else if (   grille[x-1][y-1] == grille[x][y-1] 
-      && grille[x][y-1] == grille[x+1][y-1]
-      && grille[x+1][y-1] == grille[x+2][y-1]
-           )
-
-    return 1;
-
-  else if (   grille[x-1][y-1] == grille[x-1][y-2] 
-      && grille[x-1][y-2] == grille[x-1][y-3]
-      && grille[x-1][y-3] == grille[x-1][y-4]
-           )
-
-    return 1;
-
-  else if (   grille[x-1][y-1] == grille[x-1][y] 
-      && grille[x-1][y] == grille[x-1][y+1]
-      && grille[x-1][y+1] == grille[x-1][y+2]
-         )
-
-    return 1;
-
-// les quatres  lignes diagonales 
-
-  else if (   grille[x-1][y-1] == grille[x-2][y-2] 
-      && grille[x-2][y-2] == grille[x-3][y-3]
-      && grille[x-3][y-3] == grille[x-4][y-4]
-           )
-
-    return 1;
-
-  else if (   grille[x-1][y-1] == grille[x][y] 
-      && grille[x][y] == grille[x+1][y+1]
-      && grille[x+1][y+1] == grille[x+2][y+2]
-           )
-
-     return 1;
-
-  else if (   grille[x-1][y-1] == grille[x-2][y] 
-      && grille[x-2][y] == grille[x-3][y+1]
-      && grille[x-3][y+1] == grille[x-4][y+2]
-           )
-
-    return 1;
-
-  else  if (   grille[x-1][y-1] == grille[x][y-2] 
-      && grille[x][y-2] == grille[x+1][y-3]
-      && grille[x+1][y-3] == grille[x+2][y-4]
-     )
-
-    return 1;
-	
-	
-	
-	
-	
-	
-	
-	
-	//SUPPLEMENTAIRE
-//cas la derniere choix parue au milieu du chaines:4 cas
-
- 
- 	 //ligne verticales  et lignes horizonales 
-  if (   grille[x-1][y-1] == grille[x-2][y-1] 
-      && grille[x-2][y-1] == grille[x-3][y-1]
-      && grille[x-1][y-1] == grille[x][y-1]
-      && grille[x][y-1] == grille[x+5][y-1]
-     )
-
-    return 1;
-
-  
-
-  else if (   grille[x-1][y-1] == grille[x-1][y-2] 
-      && grille[x-1][y-2] == grille[x-1][y-3]
-      && grille[x-1][y-1] == grille[x-1][y]
-      && grille[x-1][y] == grille[x-1][y+1]
-     )
-
-    return 1;
-
-  
-
-// les deux  lignes diagonales 
-
-  else if (   grille[x-1][y-1] == grille[x-2][y-2] 
-      && grille[x-2][y-2] == grille[x-3][y-3]
-      && grille[x-1][y-1] == grille[x][y]
-      && grille[x][y] == grille[x+1][y+1]
-     )
-
-    return 1;
-
-  
-
-  else if (   grille[x-1][y-1] == grille[x-2][y] 
-      && grille[x-2][y] == grille[x-3][y+1]
-      && grille[x-1][y-1] == grille[x][y-2]
-      && grille[x][y-2] == grille[x+1][y-3]
-     )
-
-    return 1;	
-	
-	else // derniere cas  !
+	else //if()
 	return 0;	
 	
+}
+
+
+
+
+
+
+
+
 
 /*******************************************/
 /* Main                                    */

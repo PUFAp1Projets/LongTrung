@@ -149,7 +149,7 @@ void ve_thanh_phai()
   dest.w = gallet_large;
   dest.h = gallet_long;
   SDL_BlitSurface(image, &src, screen, &dest);
-}
+--+--}
 
 //-----gallet gauche-----
 void ve_thanh_trai()
