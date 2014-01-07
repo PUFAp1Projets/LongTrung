@@ -1,0 +1,52 @@
+h1 
+{
+text-align:center;
+color:red;
+}
+
+.col1
+{
+font-style:bold;
+font-size:24px;
+background-color:green;
+}
+.l1
+{
+font-size:20px;
+font-style:bold;
+color:white;
+background-color:black;
+}
+table, td
+{
+border: 1px solid black;
+margin:auto; /*position du tableau*/
+}
+
+body
+{
+background: #ffffff url("images/Background.jpg") no-repeat center fixed;
+}
+
+h2
+{
+color:navy;
+margin-left:30px;
+}
+
+p, p+ul /*balises "ul" qui se trouve juste après 1 balises "p"*/
+{
+font-size:18px;
+text-indent:30px;
+margin-left:60px;
+}
+
+blockquote
+{
+margin-left:90px;
+}
+
+div
+{
+margin-left:160px;
+}
