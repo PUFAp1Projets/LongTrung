@@ -12,7 +12,6 @@ _touche "P" et "L" : joueur DROITE
 COMPILER GUIDE:
 
 g++ -o pong pong_SDL_projet.cpp -lSDL
-./pingpong
 
 LOIS DE JEUX:
 
