@@ -1,0 +1,358 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xml:lang="fr-FR" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<title>Projet Pong</title>
+	<link rel="stylesheet" media="screen" type="text/css" href="css/reset.css"/>
+	<link rel="stylesheet" media="screen" type="text/css" href="css/pages.css"/>
+	<link rel="icon" href="./img/ico.gif" type="image/x-icon"/>
+
+</head>
+<body id="SDL">
+<h1>SDL_ProgrammingLinuxGame</h1>
+<div id="divbody">
+
+<p>
+Setting Up the Display
+Before we can begin writing to the framebuffer, we need to tell the video card
+what we expect of it. It needs to know the screen resolution we want, as well as
+the pixel format to expect in the framebuffer. SDL can handle this for us with
+the SDL SetVideoMode function. The following example demonstrates how to set
+the display to a particular video mode and prepare the framebuffer for drawing:
+Code Listing 4–1 (initializing-sdl.c)
+<pre>
+/* Example of initializing SDL. */
+#include <SDL/SDL.h>
+#include <stdio.h>
+#include <stdlib.h>
+int main()
+{
+SDL_Surface *screen;
+/* Initialize SDL’s video system and check for 
+errors */
+if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+printf("Unable to initialize SDL: %s\n", 
+SDL_GetError());
+return 1;
+}
+/* Make sure SDL_Quit gets called when the 
+program exits! */
+atexit(SDL_Quit);
+/* Attempt to set a 640x480 hicolor video
+ mode */
+screen = SDL_SetVideoMode(640, 480, 16, 
+SDL_FULLSCREEN);
+if (screen == NULL) {
+printf("Unable to set video mode: %s\n", 
+SDL_GetError());
+return 1;
+}
+/* If we got this far, everything worked */
+printf("Success!\n");
+return 0;
+}
+</pre>
+</p>
+
+<p>
+Function SDL SetVideoMode(width, height, bpp, flags)
+Synopsis Creates a window or initializes the video adapter to
+        prepare for SDL video output.
+Returns Pointer to a valid SDL Surface structure on success,
+       NULL on failure.
+Parameters
+width—Width (x-resolution) of the desired video
+mode.
+height—Height (y-resolution) of the desired video
+mode.
+bpp—Desired color depth. Likely values are 8, 15, 16,
+24, or 32. 0 lets SDL pick any supported mode.
+flags—Mode flags. Possible values are
+SDL FULLSCREEN (requests a fullscreen video mode),
+SDL DOUBLEBUF (requests a double buffered video
+setup), SDL HWSURFACE (requests a hardware
+framebuffer for fast updates), SDL OPENGL (requests an
+OpenGL context), and others. We’ll discuss most of
+these later.
+</p>
+
+<p>
+Function SDL Quit()
+Synopsis Shuts down SDL cleanly, regardless of its present state.
+</p>
+
+<p>
+Structure SDL Surface
+Synopsis Represents a video surface.
+Members flags—ORed bitmask of surface flags. For instance,
+           the SDL HWSURFACE bit of flags will be set if this is a
+          hardware (video memory) surface. Read-only.
+         format—Pointer to this surface’s pixel format
+            information (a SDL PixelFormat structure).
+           Read-only.
+          w—Width of this surface (in pixels). Read-only.
+           h—Height of this surface (in pixels). Read-only.
+            pitch—Number of pixels per scanline in memory. This
+             is often different from the surface’s width – beware!
+                  Always use pitch for pixel offset calculations.
+                   Read-only.
+                  pixels—void pointer to the actual data that makes up
+                   this image. Read-write only after you call
+                  SDL LockSurface.
+
+</p>
+
+<p>
+Function SDL UpdateRect(surface, left, top, right,
+        bottom)
+Synopsis Updates a specific region of a surface. Normally used
+          to make changes appear on the screen (see text above).
+Parameters
+surface—Surface to update. Usually the screen.
+left—Starting x coordinate of the region to update.
+If all coordinates are zero, SDL UpdateRect will
+update the entire surface.
+top—Starting y coordinate of the region to update.
+right—Ending x coordinate of the region to update.
+bottom—Ending y coordinate of the region to update.
+</p>
+
+<p>
+Function SDL LoadBMP(filename)
+Synopsis Loads a .bmp image file from disk into an SDL
+          surface.
+Returns Pointer to a newly allocated SDL Surface containing
+       the loaded image.
+Parameters
+filename—Name of the bitmap file to load.
+</p>
+
+<p>
+Function SDL BlitSurface(src, srcrect, dest, destrect)
+Synopsis Blits all or part of one surface (the source) onto
+        another (the destination).
+Parameters
+src—Source surface. Pointer to a valid SDL Surface
+structure.
+srcrect—Region of the source surface to copy. This
+is a pointer to an SDL Rect structure. If this is NULL,
+SDL will try to copy the entire surface.
+dest—Destination surface.
+destrect—Region of the destination surface to
+replace with the source surface. The width and height
+of the destination surface don’t matter; SDL only
+cares about the x and y coordinates.
+</p>
+
+<p>
+Structure SDL Rect
+Synopsis Specifies regions of pixels. Used for clipping and blitting.
+Members 
+x—Starting x coordinate.
+y—Starting y coordinate.
+w—Width of the region, in pixels.
+h—Height of the region, in pixels.
+</p>
+
+<p>
+Function SDL SetColorKey(surface, flags, colorkey)
+Synopsis Adjusts the colorkey information for an SDL Surface.
+Parameters
+surface—Surface to modify.
+flags—ORed bitmask of colorkey flags.
+SDL SRCCOLORKEY enables colorkey blitting for this
+surface. SDL RLEACCEL enables run-length
+acceleration, which can speed up colorkey operations
+(but can also slow down SDL LockSurface
+significantly).
+colorkey—If SDL SRCCOLORKEY is set, this specifies
+the pixel value to use as a colorkey.
+</p>
+
+<p>
+Function SDL Flip(surf)
+Synopsis Swaps the front buffer and the back buffer on a double
+            buffered SDL display. If the display is not double
+             buffered, SDL Flip just updates the entire screen.
+Parameters
+surf—Pointer to the main video surface (returned by
+SDL SetVideoMode).
+</p>
+
+<p>
+Function SDL DisplayFormat(surface)
+Synopsis Converts an image into an optimal format for fast
+        blitting onto the screen.
+Returns Pointer to a newly allocated SDL Surface on success,
+       NULL on failure. Don’t forget to free the original
+        surface – this function creates a new surface and
+         doesn’t touch the old one. This is a very common
+          memory leak.
+Parameters
+surface—Pointer to the surface to convert.
+</p>
+
+<p>
+Structure SDL Event
+Synopsis Structure for receiving events from SDL. More
+Members
+specifically, a union of all possible event types.
+type—enum indicating the type of event. Each event
+type corresponds to a specialized event structure in
+the SDL Event union. See SDL events.h in the SDL
+API for a list of event types and their corresponding
+entries in SDL Event; there are quite a few.
+</p>
+
+<p>
+Function SDL WaitEvent(event)
+Synopsis Retrieves the next event from SDL’s event queue. If
+          there are no events, waits until one is available or
+         something bad happens. On success, copies the new
+        event into the provided SDL Event structure.
+Returns 1 on success, 0 on failure.
+Parameters
+event—Pointer to the SDL Event structure that
+should receive the event.
+Function SDL PollEvent(event)
+Synopsis Retrieves the next event from SDL’s event queue. If
+          there are no events, returns immediately. On success,
+         copies the new event into the provided SDL Event
+        structure.
+Returns 1 if an event was available, 0 otherwise.
+Parameters
+event—Pointer to the SDL Event structure that
+should receive the event.
+</p>
+
+<p>
+Processing Keyboard Events
+<pre>
+/* Example of simple keyboard input with SDL. */
+#include <SDL/SDL.h>
+#include <stdio.h>
+#include <stdlib.h>
+int main()
+{
+SDL_Surface *screen;
+SDL_Event event;
+/* Initialize SDL’s video system and check for
+ errors. */
+if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+printf("Unable to initialize SDL: %s\n", 
+SDL_GetError());
+return 1;
+}
+/* Make sure SDL_Quit gets called when the 
+program exits! */
+atexit(SDL_Quit);
+/* Attempt to set a 256x256 hicolor (16-bit) 
+video mode. */
+screen = SDL_SetVideoMode(256, 256, 16, 0);
+if (screen == NULL) {
+printf("Unable to set video mode: %s\n", 
+SDL_GetError());
+return 1;
+}
+printf("Press ’Q’ to quit.\n");
+/* Start the event loop. Keep reading events 
+until there
+is an error, or the user presses a mouse 
+button. */
+while (SDL_WaitEvent(&event) != 0) {
+SDL_keysym keysym;
+/* SDL_WaitEvent has filled in our event 
+structure with the next event. We check its 
+type field to find out what happened. */
+switch (event.type) {
+case SDL_KEYDOWN:
+printf("Key pressed. ");
+keysym = event.key.keysym;
+printf("SDL keysym is %i. ", keysym.sym);
+printf("(%s) ", SDL_GetKeyName(keysym.sym));
+/* Report the left shift modifier. */
+if (event.key.keysym.mod & KMOD_LSHIFT)
+printf("Left Shift is down.\n");
+else
+printf("Left Shift is up.\n");
+/* Did the user press Q? */
+if (keysym.sym == SDLK_q) {
+printf("’Q’ pressed, exiting.\n");
+exit(0);
+}
+break;
+case SDL_KEYUP:
+printf("Key released. ");
+printf("SDL keysym is %i. ", keysym.sym);
+printf("(%s) ", SDL_GetKeyName(keysym.sym));
+if (event.key.keysym.mod & KMOD_LSHIFT)
+printf("Left Shift is down.\n");
+else
+printf("Left Shift is up.\n");
+break;
+case SDL_QUIT:
+printf("Quit event. Bye.\n");
+exit(0);
+}
+}
+return 0;
+}
+
+Ligne download documents 
+ProgrammingLinuxGame :
+ <a href="http://www.mediafire.com/view/wam890twbmsolkb/games.pdf">games.pdf</a>
+</pre>
+</p>
+
+</div>
+
+<div id="menu">
+	<ul>
+		<li id="menu1"><a href="page1.html">Historique</a></li>
+		<li id="menu2">Documents
+			<ul>
+				<li id="menu2a"><a href="baliseshtml.html">HTML</a></li>
+				<li id="menu2b"><a href="balisescss.html">CSS</a></li>
+				<li id="menu2c"><a href="SDL.html">SDL</a></li>
+			</ul>
+		</li>
+		<li id="menu3">Code Pong
+
+		  <ul>
+		    <li id="menu3a"><a href="page2.html">Code Pong-CasseBrique</a></li>
+		    <li id="menu3b"><a href="page3.html">Code Pong-SDL</a></li>
+		  </ul>
+		</li>
+		
+
+		<li id="menu4"><a href="page4.html">Images</a></li>
+		<li id="menu5"><a href="page5.html">Jouer </a></li>
+		<li id="menu6">Auteurs
+
+		  <ul>
+		    <li id="menu6a"><a href="long.html">Doan Ngoc Long</a></li>
+		    <li id="menu6b"><a href="trung.html">Nguyen Vu Anh Trung</a></li>
+		    <li id="menu6c"><a href="trii.html">Nguyen Phan Hieu Tri</a></li>	
+		  </ul>
+
+		</li>
+	</ul>
+</div>
+
+
+
+<div id="footer">
+<div id="logopuf">
+<img src="./img/logopuf.jpg">
+</div>
+<div id="linf">
+<img src="./img/untitled.bmp">
+</div>
+<p id="footer1">
+---------------------------------------------------Ligne:
+<a href="https://github.com/PUFAp1Projets/LongTrung">github</a>
+</p>
+</div>
+</body>
+</html>

@@ -10,66 +10,317 @@
 
 </head>
 <body id="page2">
-<h1>Historique</h1>
+<h1>Code CasseBrique_C++</h1>
+<div id="divbody2">
+<p>
+
+<PRE CLASS="western" STYLE="border: none; padding: 0pt; line-height: 15.8pt; text-align: justify"><FONT COLOR="#000000"><FONT COLOR="#0000ff"><FONT FACE="Inherit"><FONT SIZE=4 STYLE="font-size: 15pt"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">//----------CASSEBRIQUE----------</SPAN></SPAN></FONT></FONT></FONT></FONT>
+<FONT COLOR="#0000ff">//----------Le bibliotheque----------</FONT>
+
+<FONT COLOR="#000000">#include &lt;iostream&gt;</FONT>
+<FONT COLOR="#000000">#include &lt;math.h&gt;</FONT>
+<FONT COLOR="#000000">#include &lt;cstdlib&gt; </FONT>
+<FONT COLOR="#000000">#include &lt;termios.h&gt;</FONT>
+<FONT COLOR="#000000">#include &lt;unistd.h&gt;</FONT>
+<FONT COLOR="#000000">#include &lt;stdio.h&gt;</FONT>
+<FONT COLOR="#000000">using namespace std;</FONT>
+
+<FONT COLOR="#0000ff">//----------Les Definis et les variables----------</FONT>
+
+<FONT COLOR="#000000">#define N 20    <FONT COLOR="#0000ff">//-----N:ligne-----</FONT></FONT>
+<FONT COLOR="#000000">#define M 45    <FONT COLOR="#0000ff">//-----M:collone-----</FONT></FONT>
+<FONT COLOR="#000000">#define L 8     <FONT COLOR="#0000ff">//-----L:largeur de gallet-----</FONT></FONT>
+<FONT COLOR="#000000">#define P 6     <FONT COLOR="#0000ff">//-----P:ligne brique-----</FONT></FONT>
+<FONT COLOR="#000000">#define Q 6     <FONT COLOR="#0000ff">//-----Q:largeur et collone de brique-----</FONT></FONT>
+<FONT COLOR="#000000">#define NBRE_GOUTTE 1</FONT>
+
+<FONT COLOR="#000000">bool touche_appuyee();</FONT>
+
+<FONT COLOR="#000000">char screen[N][M];</FONT>
+
+<FONT COLOR="#000000">void paysage();</FONT>
+<FONT COLOR="#000000">void affiche_screen();</FONT>
+<FONT COLOR="#000000">void affiche_print();</FONT>
+
+<FONT COLOR="#000000">typedef struct {</FONT>
+<FONT COLOR="#000000">  <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">double x;</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">  <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">double y;</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">  <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">double dx;</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">  <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">double dy;</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">} Sprite;</FONT>
+
+<FONT COLOR="#000000">typedef struct {</FONT>
+<FONT COLOR="#000000">  <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">int x1;</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">  <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">int y1[Q];</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">  <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">bool apparait;</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">  <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">} Block;</SPAN></SPAN></FONT>
 
 
-<div id="divbody">
+<FONT COLOR="#000000">void init_sprite(Sprite &amp; s, double x, double y, double dx, double dy);</FONT>
+<FONT COLOR="#000000">void mise_a_jour_sprite(Sprite &amp; s, Sprite u[]);</FONT>
+
+<FONT COLOR="#0000ff">/*void init_block(Block b[][], double x1, double y1);*/</FONT>
+
+<FONT COLOR="#0000ff">//----------Le Main----------</FONT>
+
+<FONT COLOR="#000000"><FONT COLOR="#0000ff"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">//----------Les valeurs au debut----------</SPAN></SPAN></FONT></FONT>
+
+<FONT COLOR="#000000">int main () {</FONT>
+<FONT COLOR="#000000">  <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">Sprite goutte[NBRE_GOUTTE];</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">  <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">init_sprite(goutte[0], 5, 5, 0.5, 0.5);</SPAN></SPAN></FONT>
+<FONT COLOR="#000000"> </FONT>
+<FONT COLOR="#000000">  <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">Sprite gallet[L];</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">  <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">for (int l=0; l&lt;L; l++)</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">    <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">{</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">      <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">gallet[0].y = 6;</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">      <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">gallet[l+1].y = gallet[l].y +1;</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">      <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">init_sprite(gallet[l], 16, gallet[l].y, 0, 0);</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">    <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">}</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">     </FONT>
+<FONT COLOR="#000000">  <FONT COLOR="#0000ff"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">/*Sprite brique1[Q];</SPAN></SPAN></FONT></FONT>
+<FONT COLOR="#0000ff">  <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">for (int i=0; i&lt;Q; i++)</SPAN></SPAN></FONT>
+<FONT COLOR="#0000ff">    <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">{</SPAN></SPAN></FONT>
+<FONT COLOR="#0000ff">      <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">brique1[0].y = 2;</SPAN></SPAN></FONT>
+<FONT COLOR="#0000ff">      <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">brique1[i+1].y = brique1[i].y +1;</SPAN></SPAN></FONT>
+<FONT COLOR="#0000ff">      <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">init_sprite(brique1[i], 2, brique1[i].y, 0, 0);</SPAN></SPAN></FONT>
+<FONT COLOR="#0000ff">    <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">}*/</SPAN></SPAN></FONT>
+
+<FONT COLOR="#000000">  </FONT>
+<FONT COLOR="#000000">  <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">Block brique[P][Q];</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">  <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">for (int i=0; i&lt;P; i++)</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">    <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">for (int j=0; j&lt;Q; j++)</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">      <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">{</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">        <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">brique[i][j].x1 = i+2;</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">        <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">for (int k=0; k&lt;P; k++)</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">          <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">{</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">            <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">brique[i][j].apparait = true;</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">            <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">brique[i][j].y1[k] = 7*j + 2 + k;</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">          <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">}</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">      <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">}</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">        </FONT>
+<FONT COLOR="#000000"><FONT COLOR="#0000ff"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">//----------Controler le gallet avec le clavier----------</SPAN></SPAN></FONT></FONT>
+
+<FONT COLOR="#000000">  <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">for (int t=0; t&lt;1000; t++) </SPAN></SPAN></FONT>
+<FONT COLOR="#000000">    <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">{</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">      <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">system (&quot;stty raw&quot;);</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">    <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">usleep(40 * 1000);</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">    <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">if (touche_appuyee()) {</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">      <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">char c = getchar();     </SPAN></SPAN></FONT>
+<FONT COLOR="#000000">      <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">system (&quot;stty cooked&quot;);</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">      <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">switch (c) {</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">     </FONT>
+<FONT COLOR="#000000"><FONT COLOR="#0000ff"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">//----------(Tricher)Controler la balle ^^~----------</SPAN></SPAN></FONT></FONT>
+<FONT COLOR="#000000">   <FONT COLOR="#0000ff"> </FONT><FONT COLOR="#0000ff"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">/*</SPAN></SPAN></FONT></FONT>
+<FONT COLOR="#0000ff">      <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">case 'a':</SPAN></SPAN></FONT>
+<FONT COLOR="#0000ff">        <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">goutte[0].dx = 0.3;</SPAN></SPAN></FONT>
+<FONT COLOR="#0000ff">        <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">break;</SPAN></SPAN></FONT>
+<FONT COLOR="#0000ff">      <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">case 'b':</SPAN></SPAN></FONT>
+<FONT COLOR="#0000ff">        <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">goutte[0].dx = -0.3;</SPAN></SPAN></FONT>
+<FONT COLOR="#0000ff">        <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">break;</SPAN></SPAN></FONT>
+<FONT COLOR="#0000ff">    <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">*/</SPAN></SPAN></FONT>
+<FONT COLOR="#0000ff"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">//----------Controler le gallet: f pour gauche, g pour droite----------</SPAN></SPAN></FONT>
+
+<FONT COLOR="#000000">      <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">case 'f':</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">        <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">for(int k=L-1;k&gt;=0;k--)   </SPAN></SPAN></FONT>
+<FONT COLOR="#000000">          <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">gallet[k].y -=1;              </SPAN></SPAN></FONT>
+<FONT COLOR="#000000">        <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">break;</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">      <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">case 'g':</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">        <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">for(int k=0;k&lt;L;k++)    </SPAN></SPAN></FONT>
+<FONT COLOR="#000000">          <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">gallet[k].y +=1;            </SPAN></SPAN></FONT>
+<FONT COLOR="#000000">        <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">break;</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">      <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">case 13:</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">        <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">system (&quot;stty cooked&quot;);</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">        <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">exit(0);</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">      <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">}              </SPAN></SPAN></FONT>
+<FONT COLOR="#000000">    <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">} </SPAN></SPAN></FONT>
+<FONT COLOR="#000000">    <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">system (&quot;stty cooked&quot;); </SPAN></SPAN></FONT>
+<FONT COLOR="#000000">        </FONT>
+<FONT COLOR="#000000"><FONT COLOR="#0000ff"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">//----------Les fonctions----------</SPAN></SPAN></FONT></FONT>
+
+<FONT COLOR="#000000">    <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">mise_a_jour_sprite (goutte[0], gallet);</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">    <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">paysage();</SPAN></SPAN></FONT>
+
+<FONT COLOR="#000000">    <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">screen[(int) goutte[0].x][(int) goutte[0].y] = 'O';</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">    <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">for (int g=0; g&lt;L; g++)</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">      <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">screen[(int) gallet[g].x][(int) gallet[g].y] = '=';</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">        </FONT>
+<FONT COLOR="#000000"><FONT COLOR="#0000ff"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">//----------Les conditions pour arranger les briques----------</SPAN></SPAN></FONT></FONT>
+
+<FONT COLOR="#000000">    <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">for (int i=P; i&gt;=0; i--)</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">      <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">for (int j=0; j&lt;Q; j++)</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">        <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">for (int k=0; k&lt;Q; k++)</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">          <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">if ((int) goutte[0].x + 1 == brique[i][j].x1 &amp;&amp; (int) goutte[0].y == brique[i][j].y1[k] &amp;&amp; brique[i][j].apparait == true)</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">            <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">{ </SPAN></SPAN></FONT>
+<FONT COLOR="#000000">              <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">goutte[0].dx = 0.7;</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">              <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">brique[i][j].apparait = false;</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">            <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">}</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">    </FONT>
+<FONT COLOR="#000000">    <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">for (int i = 0 ; i&lt;P ; i++)</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">      <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">for (int j = 0 ; j&lt;Q ; j++)</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">        <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">for (int k = 0 ; k&lt;Q ; k++)</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">          <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">if (brique[i][j].apparait)</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">            <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">screen[brique[i][j].x1][brique[i][j].y1[k]] = 'H'; </SPAN></SPAN></FONT>
+
+<FONT COLOR="#000000">    <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">affiche_screen();</SPAN></SPAN></FONT>
+
+<FONT COLOR="#000000"><FONT COLOR="#0000ff"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">//----------Les conditions pour la balle----------</SPAN></SPAN></FONT></FONT>
+
+<FONT COLOR="#000000">    <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">if ((int) goutte[0].x == 15)</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">      <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">for (int k=0; k&lt;L; k++)</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">        <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">if((int)goutte[0].y == (int)gallet[k].y) goutte[0].dx = -0.6;</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">    </FONT>
+<FONT COLOR="#000000">    <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">if ( brique[0][0].apparait == false</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">         <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">&amp;&amp; brique[0][1].apparait == false</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">         <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">&amp;&amp; brique[0][2].apparait == false</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">         <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">&amp;&amp; brique[0][3].apparait == false</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">         <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">&amp;&amp; brique[0][4].apparait == false</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">         <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">&amp;&amp; brique[0][5].apparait == false)</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">      <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">{ </SPAN></SPAN></FONT>
+<FONT COLOR="#000000">        <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">cout &lt;&lt; &quot;-----------------C'EST NORMAL----------------&quot; &lt;&lt; endl;</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">        <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">exit(0);</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">      <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">}      </SPAN></SPAN></FONT>
+<FONT COLOR="#000000">    </FONT>
+<FONT COLOR="#000000">    <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">if ((int) goutte[0].x &gt;= N-2)</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">      <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">{</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">        <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">cout &lt;&lt; &quot;------------BLEU BLEU TU AS PERDU------------&quot; &lt;&lt; endl;</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">        <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">exit(0);</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">      <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">}</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">  <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">}</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">}</FONT>
+
+<FONT COLOR="#0000ff">//----------Donner les coordonnes de la balle et le gallet----------</FONT>
+
+<FONT COLOR="#000000">void init_sprite(Sprite &amp; s,</FONT>
+<FONT COLOR="#000000">                 <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">double x, </SPAN></SPAN></FONT>
+<FONT COLOR="#000000">                 <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">double y, </SPAN></SPAN></FONT>
+<FONT COLOR="#000000">                 <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">double dx, </SPAN></SPAN></FONT>
+<FONT COLOR="#000000">                 <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">double dy) {</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">  <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">s.x = x;</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">  <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">s.y = y;</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">  <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">s.dx = dx;</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">  <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">s.dy = dy;</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">}</FONT>
+
+<FONT COLOR="#000000">void init_sprite(Sprite u[],</FONT>
+<FONT COLOR="#000000">                 <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">double x,</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">                 <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">double y,</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">                 <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">double dx,</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">                 <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">double dy) {</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">  <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">for(int r=0; r&lt;L-1; r++)</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">    <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">{</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">      <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">u[r].x=x;</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">      <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">u[r].y=y;</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">      <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">u[r].dx=dx;</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">      <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">u[r].dy=dy;</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">    <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">}</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">}</FONT>
+
+<FONT COLOR="#0000ff">//----------Les conditions----------</FONT>
+
+<FONT COLOR="#000000">void mise_a_jour_sprite(Sprite &amp; s, Sprite u[]) {</FONT>
+
+<FONT COLOR="#000000"><FONT COLOR="#0000ff"><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">//----------Pour encadrer la balle----------</SPAN></SPAN></FONT></FONT>
+
+<FONT COLOR="#000000">  <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">s.x += s.dx;</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">  <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">s.y += s.dy;</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">  </FONT>
+<FONT COLOR="#000000">  <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">if (s.x &lt; 2) s.dx = 0.8;</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">  <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">if (s.x &gt; N-2) s.dx = -0.8;</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">  <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">if (s.y &lt; 3) s.dy = 1.4;</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">  <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">if (s.y &gt; M-2) s.dy = -1.4;</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">        </FONT>
+<FONT COLOR="#000000">        <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">//----------Limiter le gallet----------</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">        </FONT>
+<FONT COLOR="#000000">  <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">for( int r=L-1; r&gt;=0; r--)    </SPAN></SPAN></FONT>
+<FONT COLOR="#000000">    <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">if(u[0].y &lt; 2) u[r].y +=1;</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">      </FONT>
+<FONT COLOR="#000000">  <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">for( int r=0; r&lt;L; r++)</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">    <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">if(u[L-1].y &gt; M-3) u[r].y -=1;</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">  </FONT>
+<FONT COLOR="#000000">}</FONT>
+
+<FONT COLOR="#0000ff">//----------Le cadre----------</FONT>
+
+<FONT COLOR="#000000">void paysage() {</FONT>
+<FONT COLOR="#000000">  <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">for (int i=0; i&lt;N; i++)</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">    <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">for (int j=0; j&lt;M; j++)</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">      <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">if (i==0 || i==N-1 || j==0 || j==M-1)</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">        <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">screen[i][j] = '#';</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">      <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">else</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">        <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">screen[i][j] = ' ';</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">}</FONT>
+
+<FONT COLOR="#000000">void affiche_screen() {</FONT>
+<FONT COLOR="#000000">  <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">system(&quot;clear&quot;);</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">  <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">for (int i=0; i&lt;N; i++) {</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">    <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">for (int j=0; j&lt;M; j++)</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">      <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">cout &lt;&lt; screen[i][j];</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">    <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">cout &lt;&lt; endl;</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">  <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">}</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">}</FONT>
+
+<FONT COLOR="#0000ff">//----------Qu'est ce que c'est??? &gt;.&lt;----------</FONT>
+
+<FONT COLOR="#000000">bool touche_appuyee()  </FONT>
+<FONT COLOR="#000000">{</FONT>
+<FONT COLOR="#000000">  <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">struct timeval tv;</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">  <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">fd_set fds;</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">  <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">tv.tv_sec = 0;</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">  <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">tv.tv_usec = 0;</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">  <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">FD_ZERO(&amp;fds);</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">  <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">FD_SET(STDIN_FILENO, &amp;fds);</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">  <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">select(STDIN_FILENO+1, &amp;fds, NULL, NULL, &amp;tv);</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">  <SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">return (FD_ISSET(0, &amp;fds));</SPAN></SPAN></FONT>
+<FONT COLOR="#000000">}</FONT></PRE>
 
 
-
-
-
-	<div>
-		<p>
-			Le personnage principal et son amie d'enfance Imoen ont grandi ensemble, sous la tutelle de leur gardien, le mage Gorion. Orphelins tous les deux, ils sont élevés à Château-Suif. Cette ancienne forteresse, devenue le centre d'une immense bibliothèque, se trouve dans la campagne de la Côte des Épées, au sud de la grande cité de la Porte de Baldur. Cependant, d'étranges choses se trament sur la Côte des Épées : la production de minerais de fer a stoppé, le métal déjà produit tombant en poussière et devenant inutilisable. Des groupes de bandits écument la campagne, convoitant le fer plus que tout autre chose. Bien qu'il soit à l'abri des murs de Château-Suif, le personnage principal est la cible de mercenaires qui tentent de l'assassiner. Gorion semble en connaitre les raisons, mais les cache au personnage principal et décide finalement de l'emmener avec lui hors Château-Suif pour une destination secrète. Cependant, la nuit après avoir quitté Château-Suif, ceux-ci se font prendre en embuscade par un groupe de bandits, dirigés par un homme mystérieux en armure noire. Celui-ci attaque Gorion et le tue quand ce dernier refuse de lui remettre le 
-		</p>
-		<p>
-			Le personnage principal et son amie d'enfance Imoen ont grandi ensemble, sous la tutelle de leur gardien, le mage Gorion. Orphelins tous les deux, ils sont élevés à Château-Suif. Cette ancienne forteresse, devenue le centre d'une immense bibliothèque, se trouve dans la campagne de la Côte des Épées, au sud de la grande cité de la Porte de Baldur. Cependant, d'étranges choses se trament sur la Côte des Épées : la production de minerais de fer a stoppé, le métal déjà produit tombant en poussière et devenant inutilisable. Des groupes de bandits écument la campagne, convoitant le fer plus que tout autre chose. Bien qu'il soit à l'abri des murs de Château-Suif, le personnage principal est la cible de mercenaires qui tentent de l'assassiner. Gorion semble en connaitre les raisons, mais les cache au personnage principal et décide finalement de l'emmener avec lui hors Château-Suif pour une destination secrète. Cependant, la nuit après avoir quitté Château-Suif, ceux-ci se font prendre en embuscade par un groupe de bandits, dirigés par un homme mystérieux en armure noire. Celui-ci attaque Gorion et le tue quand ce dernier refuse de lui remettre le 
-		</p>
-		<p>
-			Le personnage principal et son amie d'enfance Imoen ont grandi ensemble, sous la tutelle de leur gardien, le mage Gorion. Orphelins tous les deux, ils sont élevés à Château-Suif. Cette ancienne forteresse, devenue le centre d'une immense bibliothèque, se trouve dans la campagne de la Côte des Épées, au sud de la grande cité de la Porte de Baldur. Cependant, d'étranges choses se trament sur la Côte des Épées : la production de minerais de fer a stoppé, le métal déjà produit tombant en poussière et devenant inutilisable. Des groupes de bandits écument la campagne, convoitant le fer plus que tout autre chose. Bien qu'il soit à l'abri des murs de Château-Suif, le personnage principal est la cible de mercenaires qui tentent de l'assassiner. Gorion semble en connaitre les raisons, mais les cache au personnage principal et décide finalement de l'emmener avec lui hors Château-Suif pour une destination secrète. Cependant, la nuit après avoir quitté Château-Suif, ceux-ci se font prendre en embuscade par un groupe de bandits, dirigés par un homme mystérieux en armure noire. Celui-ci attaque Gorion et le tue quand ce dernier refuse de lui remettre le 
-		</p>
-
-	</div>
-	<div>
-		<p>
-			Le personnage principal et son amie d'enfance Imoen ont grandi ensemble, sous la tutelle de leur gardien, le mage Gorion. Orphelins tous les deux, ils sont élevés à Château-Suif. Cette ancienne forteresse, devenue le centre d'une immense bibliothèque, se trouve dans la campagne de la Côte des Épées, au sud de la grande cité de la Porte de Baldur. Cependant, d'étranges choses se trament sur la Côte des Épées : la production de minerais de fer a stoppé, le métal déjà produit tombant en poussière et devenant inutilisable. Des groupes de bandits écument la campagne, convoitant le fer plus que tout autre chose. Bien qu'il soit à l'abri des murs de Château-Suif, le personnage principal est la cible de mercenaires qui tentent de l'assassiner. Gorion semble en connaitre les raisons, mais les cache au personnage principal et décide finalement de l'emmener avec lui hors Château-Suif pour une destination secrète. Cependant, la nuit après avoir quitté Château-Suif, ceux-ci se font prendre en embuscade par un groupe de bandits, dirigés par un homme mystérieux en armure noire. Celui-ci attaque Gorion et le tue quand ce dernier refuse de lui remettre le 
-		</p>
-	</div>
-	<div>
-		<p>
-			Le personnage principal et son amie d'enfance Imoen ont grandi ensemble, sous la tutelle de leur gardien, le mage Gorion. Orphelins tous les deux, ils sont élevés à Château-Suif. Cette ancienne forteresse, devenue le centre d'une immense bibliothèque, se trouve dans la campagne de la Côte des Épées, au sud de la grande cité de la Porte de Baldur. Cependant, d'étranges choses se trament sur la Côte des Épées : la production de minerais de fer a stoppé, le métal déjà produit tombant en poussière et devenant inutilisable. Des groupes de bandits écument la campagne, convoitant le fer plus que tout autre chose. Bien qu'il soit à l'abri des murs de Château-Suif, le personnage principal est la cible de mercenaires qui tentent de l'assassiner. Gorion semble en connaitre les raisons, mais les cache au personnage principal et décide finalement de l'emmener avec lui hors Château-Suif pour une destination secrète. Cependant, la nuit après avoir quitté Château-Suif, ceux-ci se font prendre en embuscade par un groupe de bandits, dirigés par un homme mystérieux en armure noire. Celui-ci attaque Gorion et le tue quand ce dernier refuse de lui remettre le 
-		</p>
-	</div>
-	
-	
-	
-	
-	
-	
-	
+</p>
 </div>
-
 
 <div id="menu">
 	<ul>
 		<li id="menu1"><a href="page1.html">Historique</a></li>
-		<li id="menu2"><a href="page2.html">Documents</a>
+		<li id="menu2">Documents
 			<ul>
 				<li id="menu2a"><a href="baliseshtml.html">HTML</a></li>
 				<li id="menu2b"><a href="balisescss.html">CSS</a></li>
-				<li id="menu2c"><a href="page1.html">AP</a></li>
-				<li id="menu2d"><a href="page2.html">APp</a></li>
+				<li id="menu2c"><a href="SDL.html">SDL</a></li>
 			</ul>
 		</li>
-		<li id="menu3"><a href="page3.html">Code Pong</a></li>
-		<li id="menu4"><a href="page4.html">Difficultés</a></li>
+		<li id="menu3">Code Pong
+
+		  <ul>
+		    <li id="menu3a"><a href="page2.html">Code Pong-CasseBrique</a></li>
+		    <li id="menu3b"><a href="page3.html">Code Pong-SDL</a></li>
+		  </ul>
+		</li>
+		
+
+		<li id="menu4"><a href="page4.html">Images</a></li>
 		<li id="menu5"><a href="page5.html">Jouer </a></li>
-		<li id="menu6"><a href="page6.html">A propos de</a></li>
+		<li id="menu6">Auteurs
+
+		  <ul>
+		    <li id="menu6a"><a href="long.html">Doan Ngoc Long</a></li>
+		    <li id="menu6b"><a href="trung.html">Nguyen Vu Anh Trung</a></li>
+		    <li id="menu6c"><a href="trii.html">Nguyen Phan Hieu Tri</a></li>	
+		  </ul>
+
+		</li>
 	</ul>
 </div>
 
-
-<div id="footer"></div>
+<div id="footer">
+<div id="logopuf">
+<img src="./img/logopuf.jpg">
+</div>
+<div id="linf">
+<img src="./img/untitled.bmp">
+</div>
+<p id="footer1">
+---------------------------------------------------Ligne:
+<a href="https://github.com/PUFAp1Projets/LongTrung">github</a>
+</p>
+</div>
 </body>
 </html>
